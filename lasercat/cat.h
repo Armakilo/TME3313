@@ -14,6 +14,7 @@ enum direction{
 #define LEFT_BTN 13
 #define CENT_BTN 12
 #define RIGHT_BTN 11
+#define BACK_BTN 10
 
 
 #include <LiquidCrystal_I2C.h>

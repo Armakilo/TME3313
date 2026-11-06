@@ -7,63 +7,119 @@
 
 //globals that settings will change
 
-enum class calibration{
-  leftside,
-  rightside,
-  centside,
-}
 
 enum class Button{
+  Enter,
   Left,
-  Right
+  Right,
+  None,
+  Back
 };
 
-enum class Mpos{
-  leftmenu,
-  rightmenu,
-  centmenu
-
-  
-};
-
-
-map<pair<Mpos, Button>, state> stateTrans = {
-  {{Mpos::leftmenu,Button::Left},Mpos::leftmenu}
-  {{Mpos::leftmenu,Button::right},Mpos::centmenu}
-  {{Mpos::centmenu,Button::Left},Mpos::leftmenu}
-  {{Mpos::centmenu,Button::right},Mpos::rightmenu}
-  {{Mpos::rightmenu,Button::Left},Mpos::centmenu}
-  {{Mpos::rightmenu,Button::Right},Mpos::rightmenu}
-  
+enum class State{
+  Start,
+  Play,
+  Settings,
+  SpdSet,
+  NoiseSet,
+  PatternSet, //might have to get rid of this, complicated
+  MoCapSet, 
+  CalibMen,
+  CalibL,
+  CalibR,
+  CalibC,
 };
 
 
-class CalibMenu{
-  public:
+//MAKE SURE funcArr AND State ARE IN THE SAME ORDER!!!!
 
-    init(){
-      currentPg = centmenu;
-    }
-    void press(Button action){
-      currentPg = stateTrans[{currentPg, action}];
-
-    }
-
-  private:
-    Mpos currentPg
+void (*funcArr[])(){
+  Startf(),
+  Playf(),
+  Settingsf(),
+  SpdSetf(),
+  NoiseSetf(),
+  PatternSetf(),
+  MoCapSetf(),
+  CalibMenf(),
+  CalibLf(),
+  CalibRf(),
+  CalibCf()
 }
+
+
+struct Transition {State from; Button event; State to};
+
+static const Transition table[] = {
+  {State::CalibMen, Button::Enter, State::CalibC},
+  {State::CalibC, Button::Left, State::CalibL},
+  {State::CalibC, Button::Right, State::CalibR},
+  {State::CalibL, Button::Left, State::CalibR},
+  {State::CalibL, Button::Right, State::CalibL},
+  {State::rightmenu, Button::Right, State::leftmenu}
+};
+
+static const uint8_t trows = sizeof(table)/sizeof(table[0]); //evaluated at compile time
+
+// State next(State now, Button btn){
+//   for(uint8_t i = 0; i < trows; ++i)
+//     if(table[i].from == now && table[i].ev == btn) return table[i].to;
+//   return now;
+// }
+
+
+Transition const * table_begin(void)
+{
+    return &table[0];
+}
+
+
+Transition const * table_end(void)
+{
+    return &table[trows];
+} 
+
+static void exec_pg(State now){
+
+  switch(now)
+}
+
+void executeSM(void){
+  uint32_t currentState = 0;
+    Button action = checkInput();
+    Transition const * p_entry = table_begin();
+    Transition const * p_end = table_end();
+    bool statefound = false;
+    while((!statefound) && p_entry != p_end)){
+      if((p_entry->from == current_state) && (p_entry->event == transition_letter)){
+        current_state = p_entry->to;
+        state_found = true;
+        break;
+      }
+      ++p_entry; //look for next state
+    }
+    if(!state_found){
+      
+      Serial.prinln("state not changed");
+
+    else{
+      funcArr[current_state]();
+    }
+  }
+  
+}
+
 
 
 uint32_t speed = 10;
 bool noise = false;
 bool mocap = false;
 
-calibration a = calibration::centside; //calibration starts at the center
 
 
 
 
-void StartMenu(){
+void Startf(){
   lcdwrite("> Start Play?");
   uint8_t c_in
   while(c_in == none) c_in = delay_in(5000);
@@ -74,11 +130,21 @@ void StartMenu(){
   }
 
   
-  
+void Playf(){
+  lcdwrite("> Playing")
+  uint32_t timestart = millis();
+  uint8_t c_in
+  while((c_in == none) && (millis() - timestart < 300000)){ //timeout is at 30s
+    c_in = delay_in(100); //checking for user input
+
+    //servo commands based on current selected calibration and settings
+    //TODO write servo running function
+
+  } 
 
 }
 
-void Settings(){
+void Settingsf(){
   uint8_t c_in
   while(c_in == none) c_in = delay_in(5000);
 
@@ -89,41 +155,36 @@ void Settings(){
 
 }
 
-void CalMenu(){ //calibration menu dialogue
 
-  Calibrate Pos.
-
-}
-
-void Cal_Center(){
+void SpdSetf(){
 
 }
 
-void Cal_Left(){
+void NoiseSetf(){
 
 }
 
-void Cal_Right(){
+void PatternSetf(){
 
 }
 
-void Play(){
-  lcdwrite("> Playing")
-  uint32_t timestart = millis();
-  uint8_t c_in
-  while((c_in == none) && (millis() - timestart < 200000)){ //timeout is at a 3rd of a minute
-    c_in = delay_in(100); //checking for user input
+void MoCapSetf(){
 
-    //servo commands based on current selected calibration and settings
-    //TODO write servo running function
-
-  } 
-
-  StartMenu()
-
-  //servo routine in here
-
-
-  }
-  
 }
+
+void CalibMenf(){
+
+}
+
+void CalibLf(){
+
+}
+
+void CalibRf(){
+
+}
+
+void CalibCf(){
+
+}
+
