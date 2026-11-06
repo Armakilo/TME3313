@@ -2,13 +2,26 @@
 #define CAT_H
 
 
-enum direction{
+enum class Button{
+  Enter,
+  Left,
+  Right,
+  None,
+  Back
+};
 
-  enter,
-  left,
-  right,
-  none,
-  back
+enum class State{
+  Start,
+  Play,
+  Settings,
+  SpdSet,
+  NoiseSet,
+  PatternSet, //might have to get rid of this, complicated
+  MoCapSet, 
+  CalibMen,
+  CalibL,
+  CalibR,
+  CalibC,
 };
 
 #define LEFT_BTN 13
@@ -21,27 +34,27 @@ enum direction{
 #include <Servo.h>
 #include <string.h>
 
-extern LiquidCrystal_I2C lcd; //addr, w, h
+extern LiquidCrystal_I2C lcd;
 extern Servo myservo;
+
 
 uint8_t checkInput();
 void Servo_move(unsigned int Position_angle);
 void lcdwrite(const char* message);
 uint8_t delay_in(uint32_t ms);
-void StartMenu();
-void Play();
-void CalArea();
-void Settings();
 
+//not using class becuase stuff gets messed up when using function pointers
+Button Startf();
+Button Playf();
+Button Settingsf();
+Button SpdSetf();
+Button NoiseSetf();
+Button PatternSetf();
+Button MoCapSetf();
+Button CalibMenf();
+Button CalibLf();
+Button CalibRf();
+Button CalibCf();
 
-// class State{
-
-//   public:
-//     void StartMenu(); //Starting position
-//     void Settings(); //Speed & noise control. Patterns and 
-//     void CalArea(); 
-//     void Play();
-
-// };
 
 #endif
