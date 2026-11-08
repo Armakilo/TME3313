@@ -4,15 +4,15 @@
 
 Button menuoptions(const char * menuName, const char * optionName, uint8_t * quality){
   char modstr[17];
-  sprintf(modstr, "%s %d", optionName, quality);; // pass global variable, cant do a pointer
+  sprintf(modstr, "%s %d", optionName, *quality);; // pass global variable, cant do a pointer
   lcdwrite((const char *)modstr, menuName);
   Button input = Button::None;
   while((input != Button::Back) && (input != Button::Left) && (input != Button::Right)){
     input = wait_until();
     if(input == Button::Enter){
-      quality++;
-      if(quality > 3) quality = 1; // HES GOT LOOPS!!
-      sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
+      *quality++;
+      if(*quality > 3) *quality = 1; // HES GOT LOOPS!!
+      sprintf(modstr, "%s %d", optionName, *quality); // pass global variable, cant do a pointer
       lcdwrite((const char *)modstr, menuName);
     }
   }
@@ -23,16 +23,16 @@ Button menuoptions(const char * menuName, const char * optionName, bool * tf){ /
 //pass values by reference, get de-referenced.
 //function overloading only exists in C++, not portable back to C.  
   char modstr[17];
-  char quality = tf ? 'Y' : 'N';
+  char quality = *tf ? 'Y' : 'N'; //deref adress
   sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
   lcdwrite((const char *)modstr, menuName);
   Button input = wait_until();
   while((input != Button::Back) || (input != Button::Left) || (input != Button::Right)){
     input = wait_until();
     if(input == Button::Enter){
-      tf = !(tf);
+      *tf = !(*tf);
 
-      quality = tf ? 'Y' : 'N';
+      quality = *tf ? 'Y' : 'N';
       
       sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
       lcdwrite((const char *)modstr, menuName);

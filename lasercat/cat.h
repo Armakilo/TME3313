@@ -58,8 +58,8 @@ Button checkInput();
 void Servo_move(unsigned int Position_angle, uint8_t pin);
 void lcdwrite(const char* message, const char* header = "CatSeeking Laser");
 Button delay_in(uint32_t ms);
-Button menuoptions(const char * menuName, const char * optionName, uint8_t quality);
-Button menuoptions(const char * menuName, const char * optionName, bool tf); //function overloading!!!
+Button menuoptions(const char * menuName, const char * optionName, uint8_t * quality);
+Button menuoptions(const char * menuName, const char * optionName, bool * tf); //function overloading!!!
 Button wait_until();
 void executeSM(void);
 

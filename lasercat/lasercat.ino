@@ -24,7 +24,7 @@ void setup() {
 
   pinMode(LEFT_BTN, INPUT); //left
   pinMode(CENT_BTN, INPUT); //center
-  pinMode(RIGHT_BTH, INPUT); //right
+  pinMode(RIGHT_BTN, INPUT); //right
   pinMode(BACK_BTN, INPUT); //back
 
   pinMode(MOTION, INPUT);
