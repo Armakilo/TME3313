@@ -1,13 +1,12 @@
 #include "cat.h"
 #include "Arduino.h"
 
-#define PIN_Servo_z 9
-#define PIN_Servo_y //fix these
+
 
 
 //globals that settings will change
 
-uint32_t speed = 10;
+uint8_t speed = 1; //1,2,3
 bool noise = false;
 bool mocap = false;
 
@@ -15,16 +14,17 @@ bool mocap = false;
 
 Button Startf(){
   lcdwrite("> Start Play?");
-  uint8_t c_in
-  while(c_in == none) c_in = delay_in(5000);
-
+  return wait_until();
+  // uint8_t c_in;
+  // while(c_in == Button::None) c_in = delay_in(5000);
+}
 
   
 Button Playf(){
-  lcdwrite("> Playing")
+  lcdwrite("> Playing");
   uint32_t timestart = millis();
-  uint8_t c_in
-  while((c_in == none) && (millis() - timestart < 300000)){ //timeout is at 30s
+  Button c_in = Button::None;
+  while((c_in == Button::None) && (millis() - timestart < 300000)){ //timeout is at 30s
     c_in = delay_in(100); //checking for user input
 
     //servo commands based on current selected calibration and settings
@@ -35,14 +35,15 @@ Button Playf(){
 }
 
 Button Settingsf(){
-  Button ret = Button::None
-  uint8_t c_in
-  while(c_in == none) c_in = delay_in(5000);
-
+  lcdwrite("> Settings");
+  return wait_until();
 }
 
 
 Button SpdSetf(){
+
+  menuoptions("Settings", "Speed", speed);
+  
 
 }
 
@@ -59,6 +60,8 @@ Button MoCapSetf(){
 }
 
 Button CalibMenf(){
+  lcdwrite("> Calibrate");
+  return wait_until();
 
 }
 

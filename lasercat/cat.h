@@ -29,22 +29,30 @@ enum class State{
 #define RIGHT_BTN 11
 #define BACK_BTN 10
 
+#define PIN_Servo_z 9 //might be wrong
+#define PIN_Servo_x 8 //might be wrong
+
 
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 #include <string.h>
+#include "Arduino.h"
 
 extern LiquidCrystal_I2C lcd;
 extern Servo myservo;
+extern State currentState;
 
 
-uint8_t checkInput();
+Button checkInput();
 void Servo_move(unsigned int Position_angle);
-void lcdwrite(const char* message);
-uint8_t delay_in(uint32_t ms);
+void lcdwrite(const char* message, const char* header = "CatSeeking Laser");
+Button delay_in(uint32_t ms);
+Button menuoptions(const char * menuName, const char * optionName, uint8_t quality);
+Button wait_until();
+void executeSM(void);
 
 //not using class becuase stuff gets messed up when using function pointers
-Button Startf();
+Button Startf(); //should probably add void to the params instead.
 Button Playf();
 Button Settingsf();
 Button SpdSetf();
