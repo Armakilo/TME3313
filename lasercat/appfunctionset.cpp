@@ -23,12 +23,15 @@ Button Startf(){
   
 Button Playf(){
   lcdwrite("> Playing");
+  if(noise){
+    tone(BUZZER, NOTE_C4); //develop this more
+  }
   uint32_t timestart = millis();
   Button c_in = Button::None;
   while((c_in == Button::None) && (millis() - timestart < 30000)){ //timeout is at 30s
     c_in = delay_in(100); //checking for user input
 
-    //servo commands based on current selected calibration and settings
+    //servo commands based on current selected calibration and settings, very basic rn.
     
     Servo_move(0, PIN_Servo_z);
     Servo_move(180, PIN_Servo_z);
@@ -39,6 +42,7 @@ Button Playf(){
     Servo_move(180, PIN_Servo_xy);
 
   } 
+  noTone(BUZZER); //def need to implement better noise stuff
   return c_in;
 
 }

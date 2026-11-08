@@ -38,16 +38,19 @@ enum class State{
 #define RIGHT_BTN 11
 #define BACK_BTN 10
 
-#define MOTION 9
+#define MOTION 8
 
 #define PIN_Servo_z 5
-#define PIN_Servo_xy 6
+#define PIN_Servo_xy 9
+
+#define BUZZER 6
 
 
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 #include <string.h>
 #include "Arduino.h" //includes stdio
+#include "pitches.h"
 
 extern LiquidCrystal_I2C lcd;
 extern Servo myservo;

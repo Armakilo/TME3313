@@ -31,6 +31,8 @@ void setup() {
 
   pinMode(PIN_Servo_xy, OUTPUT); //servo lateral
   pinMode(PIN_Servo_z, OUTPUT); //servo vertical
+  
+  pinMode(BUZZER, OUTPUT); //peizo speaker
 
 }
 
