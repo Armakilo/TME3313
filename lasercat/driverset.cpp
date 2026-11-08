@@ -1,29 +1,52 @@
+//driverset.cpp - set basic functions
+
 #include "cat.h"
 
-
-
-
-Button menuoptions(const char * menuName, const char * optionName, uint8_t quality){
+Button menuoptions(const char * menuName, const char * optionName, uint8_t * quality){
   char modstr[17];
-  sprintf(modstr, optionName, " %d", quality); // pass global variable, cant do a pointer
+  sprintf(modstr, "%s %d", optionName, quality);; // pass global variable, cant do a pointer
   lcdwrite((const char *)modstr, menuName);
-  Button input = wait_until();
-  while((input != Button::Back) || (input != Button::Left) || (input != Button::Right)){
+  Button input = Button::None;
+  while((input != Button::Back) && (input != Button::Left) && (input != Button::Right)){
     input = wait_until();
     if(input == Button::Enter){
       quality++;
-      if(quality > 3) quality = 1;
+      if(quality > 3) quality = 1; // HES GOT LOOPS!!
+      sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
       lcdwrite((const char *)modstr, menuName);
     }
   }
   return input;
 }
 
+Button menuoptions(const char * menuName, const char * optionName, bool * tf){ // overloading > parametrization
+//pass values by reference, get de-referenced.
+//function overloading only exists in C++, not portable back to C.  
+  char modstr[17];
+  char quality = tf ? 'Y' : 'N';
+  sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
+  lcdwrite((const char *)modstr, menuName);
+  Button input = wait_until();
+  while((input != Button::Back) || (input != Button::Left) || (input != Button::Right)){
+    input = wait_until();
+    if(input == Button::Enter){
+      tf = !(tf);
+
+      quality = tf ? 'Y' : 'N';
+      
+      sprintf(modstr, "%s %d", optionName, quality); // pass global variable, cant do a pointer
+      lcdwrite((const char *)modstr, menuName);
+    }
+  }
+  return input;
+
+}
+
 Button delay_in(uint32_t ms){
-  Button input;
+  Button input = Button::None;
   uint32_t tim = millis();
 
-  while (millis()-tim > ms){
+  while (millis()-tim < ms){
     delay(20);
     input = checkInput();
     if(input != Button::None){
@@ -40,11 +63,12 @@ Button wait_until(){ //waits until a button is pressed
     input = checkInput();
     delay(50);
     if(input != Button::None){
-      return input;}
+      return input;
+      }
   }
 }
 
-void lcdwrite(const char* message, const char* header = "CatSeeking Laser"){ //a C++ thing, wont work in C.
+void lcdwrite(const char* message, const char* header){ //dont need the default here default is a cpp feature.
   uint8_t m_len = strlen(message);
   lcd.clear();
   
@@ -72,10 +96,10 @@ void lcdwrite(const char* message, const char* header = "CatSeeking Laser"){ //a
 // }
 
 //from elegoo smartrobotcar v4
-void Servo_move(unsigned int Position_angle)
+void Servo_move(unsigned int Position_angle, uint8_t pin)
 {
   
-  myservo.attach(PIN_Servo_z);
+  myservo.attach(pin);
   myservo.write(Position_angle); //sets the servo position according to the 90（middle）
   delay(500); // could implemt wdt stuff
   myservo.detach();

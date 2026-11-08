@@ -1,3 +1,5 @@
+//statemachine.cpp - handles state-changing logic
+
 #include "cat.h"
 
 
@@ -12,15 +14,16 @@ Button (*funcArr[])() = {
   PatternSetf,
   MoCapSetf,
   CalibMenf,
-  CalibLf,
-  CalibRf,
-  CalibCf // no parentases needed!
+  CalibSubf
+  // CalibLf,
+  // CalibRf,
+  // CalibCf // dont need parenthesis for function pointers
 };
 
 struct Transition { State from; Button event; State to;};
 
 
-static const Transition table[] = { //used ai for the table, you would not catch me filling this out manually.
+static const Transition table[] = { //used DeepSeek for the table, you would not catch me filling this out manually.
   // --- Start (Top Level) ---
   {State::Start,      Button::Enter, State::Play},
   {State::Start,      Button::Left,  State::CalibMen},
@@ -40,23 +43,13 @@ static const Transition table[] = { //used ai for the table, you would not catch
   // NO Back key for Settings
 
   // --- Calibration Menu (Top Level) ---
-  {State::CalibMen,   Button::Enter, State::CalibC},
+  {State::CalibMen,   Button::Enter, State::CalibSub},
   {State::CalibMen,   Button::Left,  State::Settings},
-  {State::CalibMen,   Button::Right, State::CalibL},
+
   // NO Back key for CalibMen
 
-  // --- Calibration Carousel (Sub-menus) ---
-  {State::CalibC,     Button::Left,  State::CalibL},
-  {State::CalibC,     Button::Right, State::CalibR},
-  {State::CalibC,     Button::Back,  State::CalibMen},   
-
-  {State::CalibL,     Button::Left,  State::CalibR},     // Carousel wrap
-  {State::CalibL,     Button::Right, State::CalibC},     
-  {State::CalibL,     Button::Back,  State::CalibMen},
-
-  {State::CalibR,     Button::Left,  State::CalibC},
-  {State::CalibR,     Button::Right, State::CalibL},     // Carousel wrap
-  {State::CalibR,     Button::Back,  State::CalibMen},
+  // --- Calibration Carousel (Sub-menus) --- (rip in peace.)
+  {State::CalibSub,   Button::Back,  State::CalibMen},   
 
   // --- Settings Carousel (Sub-menus) ---
   {State::SpdSet,     Button::Left,  State::MoCapSet},   // Carousel wrap
